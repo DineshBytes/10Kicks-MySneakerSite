@@ -584,7 +584,8 @@
       inset: 0;
       z-index: 0;
       transition: background 1.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 1.3s;
-      background: radial-gradient(ellipse 90% 80% at 65% 50%, #1a0008 0%, #0a0004 55%, #03010a 100%);
+      background: radial-gradient(ellipse 90% 80% at 65% 50%, rgba(26,0,8,0.55) 0%, rgba(10,0,4,0.45) 55%, rgba(3,1,10,0.35) 100%);
+      mix-blend-mode: multiply;
     }
 
     .shoe-bg-layer::after {
@@ -607,20 +608,71 @@
     }
 
     @keyframes streakScroll {
-      from {
-        background-position: 0 0
-      }
+      from { background-position: 0 0 }
+      to   { background-position: 0 -180px }
+    }
 
-      to {
-        background-position: 0 -180px
-      }
+    /* ── ANTIGRAVITY CINEMATIC BACKGROUND ── */
+    .hero-ag-bg {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .hero-ag-bg__img {
+      position: absolute;
+      inset: -8%;
+      background: url('video_assets/hero_bg.jpg') center center / cover no-repeat;
+      animation: agKenBurns 28s ease-in-out infinite alternate;
+      filter: brightness(0.55) saturate(1.3);
+      transform-origin: center center;
+    }
+
+    @keyframes agKenBurns {
+      0%   { transform: scale(1.12) translate(-3%, 2%); filter: brightness(0.52) saturate(1.4) hue-rotate(0deg); }
+      25%  { transform: scale(1.18) translate(2%, -3%); filter: brightness(0.58) saturate(1.2) hue-rotate(-4deg); }
+      50%  { transform: scale(1.22) translate(4%, 1%);  filter: brightness(0.50) saturate(1.5) hue-rotate(5deg); }
+      75%  { transform: scale(1.15) translate(-4%, 3%); filter: brightness(0.56) saturate(1.3) hue-rotate(-2deg); }
+      100% { transform: scale(1.10) translate(0%, -2%); filter: brightness(0.54) saturate(1.4) hue-rotate(0deg); }
+    }
+
+    .hero-ag-bg__vignette {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(5,3,7,0.85) 0%, rgba(5,3,7,0.15) 55%, rgba(5,3,7,0.05) 100%),
+        radial-gradient(ellipse at 50% 50%, transparent 35%, rgba(0,0,0,0.60) 100%);
+      pointer-events: none;
+    }
+
+    /* floating particles */
+    .hero-ag-bg__particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .ag-particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.55);
+      animation: agFloat linear infinite;
+      will-change: transform, opacity;
+    }
+    @keyframes agFloat {
+      0%   { transform: translateY(0) translateX(0) scale(1);   opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.7; }
+      100% { transform: translateY(-120px) translateX(var(--dx,20px)) scale(0.4); opacity: 0; }
     }
 
     .shoe-stage {
       position: relative;
       z-index: 5;
-      width: clamp(380px, 82%, 780px);
-      height: clamp(340px, 72%, 640px);
+      width: clamp(300px, 70%, 660px);
+      height: clamp(270px, 62%, 540px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -637,10 +689,21 @@
     .shoe-item img {
       width: 100%;
       height: auto;
-      filter: drop-shadow(0 32px 80px rgba(0, 0, 0, 0.90)) drop-shadow(0 8px 24px rgba(0, 0, 0, 0.65));
+      /* mix-blend-mode:multiply removes white product-photo backgrounds on dark panels */
+      mix-blend-mode: multiply;
+      filter: drop-shadow(0 36px 90px rgba(0, 0, 0, 0.95)) drop-shadow(0 10px 30px rgba(0, 0, 0, 0.80));
       display: block;
-      border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+    }
+
+    /* Individual shoe size overrides */
+    .shoe-item[data-shoename="speedcatBlack"] img,
+    .shoe-item[data-shoename="sambaOG"] img,
+    .shoe-item[data-shoename="runfalcon20"] img,
+    .shoe-item[data-shoename="chuckTaylorHi"] img,
+    .shoe-item[data-shoename="airJordan1Bred"] img {
+      transform: scale(0.72);
+      transform-origin: center center;
     }
 
     /* ═══ BRAND ANIMATIONS — PREMIUM EDITION ═══ */
@@ -2814,6 +2877,13 @@
       <!-- RIGHT — Animated Sneaker Showcase -->
       <div class="hero-right">
 
+        <!-- Antigravity Cinematic Background -->
+        <div class="hero-ag-bg" id="hero-ag-bg" aria-hidden="true">
+          <div class="hero-ag-bg__img"></div>
+          <div class="hero-ag-bg__vignette"></div>
+          <div class="hero-ag-bg__particles" id="ag-particles"></div>
+        </div>
+
         <!-- Color-synced animated background gradient -->
         <div class="shoe-bg-layer" id="shoe-bg-layer"></div>
 
@@ -3905,28 +3975,46 @@
       /* ── 9. HERO SNEAKER SHOWCASE ── */
       const HERO_SHOES = [
         {
-          brand: 'nike', label: 'NIKE', name: 'airJordan1Mid',
-          img: 'jordan1.jpg',
-          bg: 'radial-gradient(ellipse 90% 80% at 65% 50%, #4a0010 0%, #200005 55%, #07000a 100%)',
-          glow: 'rgba(220,20,20,0.30)', dot: '#E10600', streaks: true
+          brand: 'nike', label: 'NIKE', name: 'airJordan1Bred',
+          img: 'jordan_bred_new.jpg',
+          bg: 'radial-gradient(ellipse 90% 80% at 65% 50%, #3a0008 0%, #1a0003 55%, #060001 100%)',
+          glow: 'rgba(220,20,20,0.38)', dot: '#E10600', streaks: true
         },
         {
-          brand: 'puma', label: 'PUMA', name: 'pumaSpeedcats',
-          img: 'speedcat.png',
+          brand: 'nike', label: 'NIKE', name: 'airMax90',
+          img: 'airmax90.png?v=2',
+          bg: 'radial-gradient(ellipse 90% 80% at 65% 50%, #1a0e00 0%, #0d0700 55%, #040200 100%)',
+          glow: 'rgba(220,130,20,0.32)', dot: '#dc8214', streaks: true
+        },
+        {
+          brand: 'puma', label: 'PUMA', name: 'speedcatRed',
+          img: 'speedcat_red_new.png',
           bg: 'radial-gradient(ellipse 90% 80% at 65% 50%, #3a0000 0%, #1a0000 55%, #080000 100%)',
           glow: 'rgba(220,20,20,0.28)', dot: '#e10600', streaks: false
         },
         {
-          brand: 'adidas', label: 'ADIDAS', name: 'adidasOgSambas',
-          img: 'samba.png',
-          bg: 'radial-gradient(ellipse 90% 80% at 65% 50%, #2a0018 0%, #11000b 55%, #050002 100%)',
-          glow: 'rgba(160,20,80,0.25)', dot: '#901030', streaks: false
+          brand: 'puma', label: 'PUMA', name: 'speedcatBlack',
+          img: 'speedcat_black.png?v=2',
+          bg: 'radial-gradient(ellipse 90% 80% at 65% 50%, #0a0a12 0%, #050508 55%, #020204 100%)',
+          glow: 'rgba(180,180,255,0.18)', dot: '#c8c8ff', streaks: false
         },
         {
-          brand: 'converse', label: 'CONVERSE', name: 'converseChucks',
-          img: 'chuck.png',
-          bg: 'radial-gradient(ellipse 90% 80% at 65% 50%, #301800 0%, #110800 55%, #050200 100%)',
-          glow: 'rgba(180,100,20,0.20)', dot: '#d07010', streaks: false
+          brand: 'adidas', label: 'ADIDAS', name: 'sambaOG',
+          img: 'samba_og_new.png',
+          bg: 'radial-gradient(ellipse 90% 80% at 65% 50%, #0a0a10 0%, #050508 55%, #020204 100%)',
+          glow: 'rgba(120,120,200,0.22)', dot: '#7880c8', streaks: false
+        },
+        {
+          brand: 'adidas', label: 'ADIDAS', name: 'runfalcon20',
+          img: 'runfalcon.png?v=2',
+          bg: 'radial-gradient(ellipse 90% 80% at 65% 50%, #00122a 0%, #000915 55%, #000306 100%)',
+          glow: 'rgba(20,120,255,0.32)', dot: '#1478ff', streaks: false
+        },
+        {
+          brand: 'converse', label: 'CONVERSE', name: 'chuckTaylorHi',
+          img: 'chuck_new.png',
+          bg: 'radial-gradient(ellipse 90% 80% at 65% 50%, #0e0e0e 0%, #080808 55%, #020202 100%)',
+          glow: 'rgba(200,200,200,0.15)', dot: '#c8c8c8', streaks: false
         }
       ];
       let hIdx = 0, hTimer = null;
@@ -3936,7 +4024,7 @@
         if (!stage || stage.children.length > 0) return;
         HERO_SHOES.forEach((s, i) => {
           const el = document.createElement('div');
-          el.className = 'shoe-item'; el.dataset.brand = s.brand;
+          el.className = 'shoe-item'; el.dataset.brand = s.brand; el.dataset.shoename = s.name;
           el.innerHTML = '<img src="' + s.img + '" alt="' + s.label + '" loading="' + (i === 0 ? 'eager' : 'lazy') + '" onerror="this.parentElement.style.display=\'none\'"/>';
           stage.appendChild(el);
           const d = document.createElement('button');
@@ -3976,6 +4064,48 @@
         hTimer = setTimeout(function () { showHeroShoe((idx + 1) % HERO_SHOES.length); }, 4300);
       }
       if (document.getElementById('shoe-stage')) initHeroShowcase();
+
+      /* ── ANTIGRAVITY PARTICLE SPAWNER ── */
+      (function spawnAgParticles() {
+        const container = document.getElementById('ag-particles');
+        if (!container) return;
+        const colors = [
+          'rgba(255,255,255,0.6)',
+          'rgba(230,50,50,0.45)',
+          'rgba(0,212,255,0.35)',
+          'rgba(200,180,255,0.40)'
+        ];
+        function makeParticle() {
+          const p = document.createElement('div');
+          p.className = 'ag-particle';
+          const size  = Math.random() * 5 + 2;         // 2–7 px
+          const left  = Math.random() * 100;           // % across
+          const bottom = Math.random() * 40;           // % from bottom
+          const dur   = Math.random() * 8 + 5;         // 5–13s
+          const delay = Math.random() * 6;             // stagger
+          const dx    = (Math.random() - 0.5) * 60;   // drift left/right
+          const col   = colors[Math.floor(Math.random() * colors.length)];
+          p.style.cssText = [
+            'width:'   + size + 'px',
+            'height:'  + size + 'px',
+            'left:'    + left + '%',
+            'bottom:'  + bottom + '%',
+            'background:' + col,
+            '--dx:' + dx + 'px',
+            'animation-duration:' + dur + 's',
+            'animation-delay:'    + delay + 's',
+            'box-shadow: 0 0 ' + (size * 2) + 'px ' + col
+          ].join(';');
+          container.appendChild(p);
+          // recycle particle after animation
+          setTimeout(function () {
+            p.remove();
+            makeParticle();
+          }, (dur + delay) * 1000 + 200);
+        }
+        // seed 28 particles
+        for (let n = 0; n < 28; n++) makeParticle();
+      })();
 
     })();
   </script>
