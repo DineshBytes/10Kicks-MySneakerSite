@@ -35,6 +35,8 @@
 10KICKS is a single-page sneaker e-commerce application built to feel premium — the kind of shopping experience you'd expect from a flagship brand store. It was built as a 3-person academic project, and this repository reflects a **complete personal redesign** of the entire home page, UI system, animation architecture, and user experience by **Dinesh**.
 
 Every scroll effect, every glassmorphism card, every neon glow, every animated brand carousel — rebuilt from scratch.
+## Live Demo  
+🔗 https://10kicks.vercel.app/
 
 ---
 
