@@ -147,10 +147,8 @@ No install. No build tools. No dependencies to pull.
 # 1. Clone the repo
 git clone https://github.com/DineshBytes/10Kicks-MySneakerSite.git
 
-# 2. Open in browser
-open index.html
-# or just double-click index.html
-```
+# 2. Live Demo  
+🔗 https://10kicks.vercel.app/
 
 Works in any modern browser. That's it.
 
