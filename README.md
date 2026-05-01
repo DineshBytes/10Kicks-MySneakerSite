@@ -35,8 +35,6 @@
 10KICKS is a single-page sneaker e-commerce application built to feel premium — the kind of shopping experience you'd expect from a flagship brand store. It was built as a 3-person academic project, and this repository reflects a **complete personal redesign** of the entire home page, UI system, animation architecture, and user experience by **Dinesh**.
 
 Every scroll effect, every glassmorphism card, every neon glow, every animated brand carousel — rebuilt from scratch.
-## Live Demo  
-🔗 https://10kicks.vercel.app/
 
 ---
 
@@ -154,19 +152,28 @@ git clone https://github.com/DineshBytes/10Kicks-MySneakerSite.git
 
 Works in any modern browser. That's it.
 
----
+
 
 ## 👥 Team
 
-This project was built collaboratively by 3 members. Here's the contribution breakdown:
+This project was built collaboratively by 3 members.
 
-| Member | Role |
-|---|---|
-| **Dinesh** *(this repo)* | **Complete home page redesign** — UI/UX system, glassmorphism design tokens, hero carousel, all animations, neon effects, custom cursor, staggered transitions, depth system, and overall visual direction |
-| **Irfan** | Core structure — landing page skeleton, navigation, product card layout |
-| **Jaswanth** | Brand category design, visual consistency |
+---
+
+### 🟢 Dinesh *(this repo)*
+Took ownership of the **entire home page** and rebuilt it from the ground up. Designed and implemented the glassmorphism UI system, hero carousel with brand-specific animations, neon glow effects, custom cursor, staggered card transitions, depth layering, and the overall visual identity of the site. Every animation, every shadow, every interaction on the home page — that's this guy.
 
 > This is **Dinesh's version of the project** — independently pushed with a complete redesign of the entire home page, animation system, and visual identity.
+
+---
+
+### 🟡 Jaswanth
+Handled brand category design and worked on maintaining visual consistency across the different sections of the site.
+
+---
+
+### 🔴 Irfan
+Built the core skeleton of the project — landing page structure, navigation system, and the initial product card layout that the rest of the team built on top of.
 
 ---
 
