@@ -46,7 +46,6 @@ Every scroll effect, every glassmorphism card, every neon glow, every animated b
 - Dynamic background sync that reacts to the active brand
 - Floating product cards with staggered entrance animations
 - Neon lighting and glowing shadow system
-- Custom cursor with interactive hover states
 - Glassmorphism design tokens used consistently throughout
 
 ### 🛍️ Product Experience
@@ -161,7 +160,7 @@ This project was built collaboratively by 3 members.
 ---
 
 ### 🟢 Dinesh *(this repo)*
-Took ownership of the **entire home page** and rebuilt it from the ground up. Designed and implemented the glassmorphism UI system, hero carousel with brand-specific animations, neon glow effects, custom cursor, staggered card transitions, depth layering, and the overall visual identity of the site. Every animation, every shadow, every interaction on the home page — that's this guy.
+Took ownership of the **entire home page** and rebuilt it from the ground up. Designed and implemented the glassmorphism UI system, hero carousel with brand-specific animations, neon glow effects, staggered card transitions, depth layering, and the overall visual identity of the site. Every animation, every shadow, every interaction on the home page — that's this guy.
 
 > This is **Dinesh's version of the project** — independently pushed with a complete redesign of the entire home page, animation system, and visual identity.
 

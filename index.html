@@ -76,48 +76,6 @@
       cursor: pointer
     }
 
-    /* ── CUSTOM CURSOR ─────────────────────────────────── */
-    #cursor-dot {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 99999;
-      width: 8px;
-      height: 8px;
-      background: var(--neon-cyan);
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s ease, background 0.2s;
-      mix-blend-mode: screen;
-      box-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
-    }
-
-    #cursor-ring {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 99998;
-      width: 36px;
-      height: 36px;
-      border: 1.5px solid rgba(0, 212, 255, 0.5);
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      transition: transform 0.15s ease, width 0.3s var(--ease-out-back), height 0.3s var(--ease-out-back), border-color 0.3s;
-      will-change: transform;
-    }
-
-    body:hover #cursor-ring {
-      opacity: 1
-    }
-
-    .cursor-hover #cursor-ring {
-      width: 56px;
-      height: 56px;
-      border-color: var(--neon-red);
-      background: rgba(230, 50, 50, 0.06);
-    }
 
     /* ── PAGE SYSTEM ───────────────────────────────────── */
     .pg {
@@ -2716,11 +2674,6 @@
         grid-template-columns: repeat(2, 1fr);
         padding: 0 16px 40px
       }
-
-      #cursor-dot,
-      #cursor-ring {
-        display: none
-      }
     }
 
     @media(max-width:480px) {
@@ -2745,9 +2698,7 @@
 
 <body>
 
-  <!-- CUSTOM CURSOR (hidden on mobile via CSS) -->
-  <div id="cursor-dot"></div>
-  <div id="cursor-ring"></div>
+
 
   <!-- ABOUT OVERLAY -->
   <div id="about-overlay" onclick="closeAboutOnBg(event)">
@@ -3739,36 +3690,6 @@
     (function () {
       'use strict';
 
-      /* ── 1. CUSTOM CURSOR ──────────────────────────────────── */
-      const dot = document.getElementById('cursor-dot');
-      const ring = document.getElementById('cursor-ring');
-      if (!dot || !ring) return;
-
-      let mX = 0, mY = 0, rX = 0, rY = 0;
-
-      document.addEventListener('mousemove', e => {
-        mX = e.clientX; mY = e.clientY;
-        dot.style.left = mX + 'px';
-        dot.style.top = mY + 'px';
-      });
-
-      /* Smooth lagging ring */
-      (function animRing() {
-        rX += (mX - rX) * 0.12;
-        rY += (mY - rY) * 0.12;
-        ring.style.left = rX + 'px';
-        ring.style.top = rY + 'px';
-        requestAnimationFrame(animRing);
-      })();
-
-      /* Cursor expand on hover */
-      function setCursorHover(add) {
-        document.body.classList.toggle('cursor-hover', add);
-      }
-      document.addEventListener('mouseover', e => {
-        const t = e.target.closest('button,a,[onclick],.prod-card,.brand-card');
-        setCursorHover(!!t);
-      });
 
       /* ── 2. HERO PARTICLE CANVAS ───────────────────────────── */
       const canvas = document.getElementById('hero-canvas');
